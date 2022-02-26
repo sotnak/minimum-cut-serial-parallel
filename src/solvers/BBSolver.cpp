@@ -1,0 +1,68 @@
+//
+// Created by antos on 25.09.2021.
+//
+
+#include "headers/BBSolver.h"
+#include <iostream>
+
+const char *BBSolver::getName() {
+    return "bb";
+}
+
+Solution BBSolver::solve(const Problem &problem) {
+    currentProblem = problem;
+
+    Configuration tmpConfig(problem.nodeCount);
+    tmpConfig.weight = INT32_MAX;
+
+    currentMin.push_back(tmpConfig);
+
+    Configuration initConfig(problem.nodeCount);
+    initConfig.assign(0,1,currentProblem.bindingMatrix);    //set node 0 to 1 to avoid duplicity in solutions
+
+    rec(initConfig, 1);
+
+    Solution res(currentMin, currentProblem);
+
+    currentMin.clear();
+
+    return res;
+}
+
+void BBSolver::rec(const Configuration& config, int depth) {
+    this->counter++;
+
+    if(depth >= currentProblem.nodeCount){
+        if(config.setSizeMin() >= 5) {
+            if (config.weight < currentMin[0].weight) {
+                currentMin.clear();
+                currentMin.push_back(config);
+            }
+
+            else if (config.weight == currentMin[0].weight) {
+                currentMin.push_back(config);
+            }
+        }
+        return;
+    }
+
+
+    if(config.weight > currentMin[0].weight){
+        return;
+    }
+
+    if( 5 - config.setSizeMin() > currentProblem.nodeCount - depth){
+        return;
+    }
+
+    Configuration n_config1(config);
+    n_config1.assign(depth,1,currentProblem.bindingMatrix);
+
+    Configuration n_config2(config);
+    n_config2.assign(depth,2,currentProblem.bindingMatrix);
+
+    rec(n_config1, depth+1);
+    rec(n_config2, depth+1);
+}
+
+BBSolver::~BBSolver(){}

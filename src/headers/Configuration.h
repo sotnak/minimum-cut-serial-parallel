@@ -1,0 +1,41 @@
+//
+// Created by antos on 24.09.2021.
+//
+
+#ifndef HW2_CONFIGURATION_H
+#define HW2_CONFIGURATION_H
+
+#include <vector>
+#include <utility>
+#include <cstdint>
+#include <string>
+
+using namespace std;
+
+
+class Configuration {
+public:
+    uint8_t* config = nullptr;
+    int nodeCount = 0;
+    int weight = 0;
+
+    int set1Size = 0;
+    int set2Size = 0;
+
+    Configuration(int nodeCount);
+    Configuration(const Configuration& configuration);
+    Configuration() = default;
+
+    ~Configuration();
+
+    Configuration& operator=(const Configuration& other);
+
+    [[nodiscard]] string toString() const;
+
+    void assign(int node, int set, uint8_t** bindingMatrix);
+
+    int setSizeMin() const;
+};
+
+
+#endif //HW2_CONFIGURATION_H
