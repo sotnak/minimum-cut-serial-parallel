@@ -20,7 +20,8 @@ public:
     int weight = 0;
 
     int set1Size = 0;
-    int set2Size = 0;
+
+    int numOfEdges = 0;
 
     Configuration(int nodeCount);
     Configuration(const Configuration& configuration);
@@ -34,7 +35,7 @@ public:
 
     void assign(int node, int set, uint8_t** bindingMatrix);
 
-    int setSizeMin() const;
+    int a() const;
 };
 
 

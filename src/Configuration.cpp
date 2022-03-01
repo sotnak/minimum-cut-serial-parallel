@@ -6,10 +6,23 @@
 #include <iostream>
 
 string Configuration::toString() const {
-    string res;
+    string res = to_string(weight) + " ";
+    res += to_string(numOfEdges) + " ";
 
     for(int i = 0; i < nodeCount; i++){
-        res += to_string(config[i]) + " ";
+        switch (config[i]) {
+            case 1:
+                res+="x ";
+                break;
+
+            case 2:
+                res+="y ";
+                break;
+
+            default:
+                res+=to_string(config[i]) + " ";
+                break;
+        }
     }
 
     return res.substr(0, res.length()-1);
@@ -21,7 +34,8 @@ Configuration::Configuration(const Configuration &other){
     nodeCount = other.nodeCount;
 
     set1Size = other.set1Size;
-    set2Size = other.set2Size;
+
+    numOfEdges = other.numOfEdges;
 
     config = new uint8_t[nodeCount];
 
@@ -42,7 +56,8 @@ Configuration &Configuration::operator=(const Configuration &other) {
     weight = other.weight;
 
     set1Size = other.set1Size;
-    set2Size = other.set2Size;
+
+    numOfEdges = other.numOfEdges;
 
     if(nodeCount != other.nodeCount){
         delete[] config;
@@ -78,9 +93,6 @@ void Configuration::assign(int node, int set, uint8_t** bindingMatrix) {
     if(set == 1)
         set1Size++;
 
-    if(set == 2)
-        set2Size ++;
-
     uint8_t tmpSet;
 
     for(int i = 0; i<nodeCount; i++){
@@ -89,13 +101,13 @@ void Configuration::assign(int node, int set, uint8_t** bindingMatrix) {
 
         if(tmpSet!=set && tmpSet!=0){
             weight += bindingMatrix[node][i];
+            numOfEdges++;
         }
     }
+    //cout<<toString() <<endl;
 }
 
-int Configuration::setSizeMin() const {
-    if(set1Size<set2Size)
-        return set1Size;
+int Configuration::a() const {
 
-    return set2Size;
+    return set1Size;
 }

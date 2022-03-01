@@ -11,7 +11,7 @@ Solution::Solution(const vector<Configuration>& configs, const Problem& problem)
 
 string Solution::toString() {
 
-    string str = to_string(configurations[0].weight) + "\n";
+    string str;
 
     for(auto config : configurations){
         str += config.toString() + "\n";

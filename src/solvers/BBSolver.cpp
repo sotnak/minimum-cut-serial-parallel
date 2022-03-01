@@ -5,6 +5,8 @@
 #include "headers/BBSolver.h"
 #include <iostream>
 
+//const int minA = 5;
+
 const char *BBSolver::getName() {
     return "bb";
 }
@@ -32,8 +34,19 @@ Solution BBSolver::solve(const Problem &problem) {
 void BBSolver::rec(const Configuration& config, int depth) {
     this->counter++;
 
+    int a = config.a();
+
     if(depth >= currentProblem.nodeCount){
-        if(config.setSizeMin() >= 5) {
+
+        //if(a >= minA && a <= currentProblem.nodeCount/2) {
+        if(a == currentProblem.nodeCount/2) {
+
+            /*
+            if(a == currentProblem.nodeCount/2 && config.config[0] == 2){ //filtering duplicity
+                return;
+            }
+             */
+
             if (config.weight < currentMin[0].weight) {
                 currentMin.clear();
                 currentMin.push_back(config);
@@ -51,7 +64,8 @@ void BBSolver::rec(const Configuration& config, int depth) {
         return;
     }
 
-    if( 5 - config.setSizeMin() > currentProblem.nodeCount - depth){
+    //if( minA - a > currentProblem.nodeCount - depth || a > currentProblem.nodeCount/2){
+    if( a > currentProblem.nodeCount/2){
         return;
     }
 
