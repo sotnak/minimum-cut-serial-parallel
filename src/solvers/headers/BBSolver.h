@@ -14,6 +14,8 @@ class BBSolver: public ASolver{
     Problem currentProblem;
     vector<Configuration> currentMin;
 
+    int minA=5;
+
 public:
     static const char * getName();
     Solution solve(const Problem &problem) override;
