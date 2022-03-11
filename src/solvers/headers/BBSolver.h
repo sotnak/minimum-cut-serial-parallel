@@ -13,6 +13,7 @@ class BBSolver: public ASolver{
     void rec(const Configuration& config, int depth=0);
     Problem currentProblem;
     vector<Configuration> currentMin;
+    int currentMinWeight=INT32_MAX;
 
     int minA=5;
 

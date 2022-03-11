@@ -74,43 +74,43 @@ build cmake_object_order_depends_target_pdp: phony || CMakeFiles/pdp.dir
 
 build CMakeFiles/pdp.dir/src/main.cpp.o: CXX_COMPILER__pdp_Debug /home/pavel/Desktop/pdp/src/main.cpp || cmake_object_order_depends_target_pdp
   DEP_FILE = CMakeFiles/pdp.dir/src/main.cpp.o.d
-  FLAGS = -pthread -Wall -pedantic -g -std=gnu++17
+  FLAGS = -fopenmp -Wall -pedantic -g -std=gnu++17
   OBJECT_DIR = CMakeFiles/pdp.dir
   OBJECT_FILE_DIR = CMakeFiles/pdp.dir/src
 
 build CMakeFiles/pdp.dir/src/Problem.cpp.o: CXX_COMPILER__pdp_Debug /home/pavel/Desktop/pdp/src/Problem.cpp || cmake_object_order_depends_target_pdp
   DEP_FILE = CMakeFiles/pdp.dir/src/Problem.cpp.o.d
-  FLAGS = -pthread -Wall -pedantic -g -std=gnu++17
+  FLAGS = -fopenmp -Wall -pedantic -g -std=gnu++17
   OBJECT_DIR = CMakeFiles/pdp.dir
   OBJECT_FILE_DIR = CMakeFiles/pdp.dir/src
 
 build CMakeFiles/pdp.dir/src/Solution.cpp.o: CXX_COMPILER__pdp_Debug /home/pavel/Desktop/pdp/src/Solution.cpp || cmake_object_order_depends_target_pdp
   DEP_FILE = CMakeFiles/pdp.dir/src/Solution.cpp.o.d
-  FLAGS = -pthread -Wall -pedantic -g -std=gnu++17
+  FLAGS = -fopenmp -Wall -pedantic -g -std=gnu++17
   OBJECT_DIR = CMakeFiles/pdp.dir
   OBJECT_FILE_DIR = CMakeFiles/pdp.dir/src
 
 build CMakeFiles/pdp.dir/src/Configuration.cpp.o: CXX_COMPILER__pdp_Debug /home/pavel/Desktop/pdp/src/Configuration.cpp || cmake_object_order_depends_target_pdp
   DEP_FILE = CMakeFiles/pdp.dir/src/Configuration.cpp.o.d
-  FLAGS = -pthread -Wall -pedantic -g -std=gnu++17
+  FLAGS = -fopenmp -Wall -pedantic -g -std=gnu++17
   OBJECT_DIR = CMakeFiles/pdp.dir
   OBJECT_FILE_DIR = CMakeFiles/pdp.dir/src
 
 build CMakeFiles/pdp.dir/src/solvers/Asolver.cpp.o: CXX_COMPILER__pdp_Debug /home/pavel/Desktop/pdp/src/solvers/Asolver.cpp || cmake_object_order_depends_target_pdp
   DEP_FILE = CMakeFiles/pdp.dir/src/solvers/Asolver.cpp.o.d
-  FLAGS = -pthread -Wall -pedantic -g -std=gnu++17
+  FLAGS = -fopenmp -Wall -pedantic -g -std=gnu++17
   OBJECT_DIR = CMakeFiles/pdp.dir
   OBJECT_FILE_DIR = CMakeFiles/pdp.dir/src/solvers
 
 build CMakeFiles/pdp.dir/src/solvers/BBSolver.cpp.o: CXX_COMPILER__pdp_Debug /home/pavel/Desktop/pdp/src/solvers/BBSolver.cpp || cmake_object_order_depends_target_pdp
   DEP_FILE = CMakeFiles/pdp.dir/src/solvers/BBSolver.cpp.o.d
-  FLAGS = -pthread -Wall -pedantic -g -std=gnu++17
+  FLAGS = -fopenmp -Wall -pedantic -g -std=gnu++17
   OBJECT_DIR = CMakeFiles/pdp.dir
   OBJECT_FILE_DIR = CMakeFiles/pdp.dir/src/solvers
 
 build CMakeFiles/pdp.dir/src/ArgGetter.cpp.o: CXX_COMPILER__pdp_Debug /home/pavel/Desktop/pdp/src/ArgGetter.cpp || cmake_object_order_depends_target_pdp
   DEP_FILE = CMakeFiles/pdp.dir/src/ArgGetter.cpp.o.d
-  FLAGS = -pthread -Wall -pedantic -g -std=gnu++17
+  FLAGS = -fopenmp -Wall -pedantic -g -std=gnu++17
   OBJECT_DIR = CMakeFiles/pdp.dir
   OBJECT_FILE_DIR = CMakeFiles/pdp.dir/src
 
@@ -123,7 +123,7 @@ build CMakeFiles/pdp.dir/src/ArgGetter.cpp.o: CXX_COMPILER__pdp_Debug /home/pave
 # Link the executable pdp
 
 build pdp: CXX_EXECUTABLE_LINKER__pdp_Debug CMakeFiles/pdp.dir/src/main.cpp.o CMakeFiles/pdp.dir/src/Problem.cpp.o CMakeFiles/pdp.dir/src/Solution.cpp.o CMakeFiles/pdp.dir/src/Configuration.cpp.o CMakeFiles/pdp.dir/src/solvers/Asolver.cpp.o CMakeFiles/pdp.dir/src/solvers/BBSolver.cpp.o CMakeFiles/pdp.dir/src/ArgGetter.cpp.o
-  FLAGS = -pthread -Wall -pedantic -g
+  FLAGS = -fopenmp -Wall -pedantic -g
   LINK_FLAGS = -rdynamic
   OBJECT_DIR = CMakeFiles/pdp.dir
   POST_BUILD = :

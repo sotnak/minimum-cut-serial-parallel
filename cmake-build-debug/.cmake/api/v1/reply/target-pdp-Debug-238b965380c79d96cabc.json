@@ -35,7 +35,7 @@
 			"compileCommandFragments" : 
 			[
 				{
-					"fragment" : " -pthread -Wall -pedantic -g"
+					"fragment" : " -fopenmp -Wall -pedantic -g"
 				},
 				{
 					"fragment" : "-std=gnu++17"
@@ -68,7 +68,7 @@
 		"commandFragments" : 
 		[
 			{
-				"fragment" : "-pthread -Wall -pedantic -g",
+				"fragment" : "-fopenmp -Wall -pedantic -g",
 				"role" : "flags"
 			},
 			{

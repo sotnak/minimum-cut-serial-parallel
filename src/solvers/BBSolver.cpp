@@ -4,6 +4,7 @@
 
 #include "headers/BBSolver.h"
 #include <iostream>
+#include <omp.h>
 
 const char *BBSolver::getName() {
     return "bb";
@@ -14,15 +15,18 @@ Solution BBSolver::solve(const Problem &problem) {
 
     currentProblem = problem;
 
-    Configuration tmpConfig(problem.nodeCount);
-    tmpConfig.weight = INT32_MAX;
+    Configuration initConfig(currentProblem.nodeCount);
+    initConfig.assign(0,1,currentProblem.bindingMatrix);    //set node 0 to 1 to avoid duplicity in solutions
 
-    currentMin.push_back(tmpConfig);
+    #pragma omp parallel default(none) shared(currentProblem, currentMinWeight, currentMin, minA, counter, initConfig)
+    {
+        #pragma omp single
+        {
+            //cout<<"num of threads: "<<omp_get_num_threads()<<endl;
 
-    Configuration initConfig(problem.nodeCount);
-    //initConfig.assign(0,1,currentProblem.bindingMatrix);    //set node 0 to 1 to avoid duplicity in solutions
-
-    rec(initConfig, 0);
+            rec(initConfig, 1);
+        }
+    }
 
     Solution res(currentMin, currentProblem);
 
@@ -32,39 +36,47 @@ Solution BBSolver::solve(const Problem &problem) {
 }
 
 void BBSolver::rec(const Configuration& config, int depth) {
-    this->counter++;
+
+    #pragma omp atomic update
+    counter++;
 
     int a = config.a();
 
     if(depth >= currentProblem.nodeCount){
 
-        if(a >= minA && a <= currentProblem.nodeCount/2) {
-        //if(a == currentProblem.nodeCount/2) {
+        //if(a >= minA && a <= currentProblem.nodeCount/2) {
+        if(a >= minA) {
 
-
+            /*
             if(currentProblem.nodeCount%2==0 && a == currentProblem.nodeCount/2 && config.config[0] == 2){ //filtering duplicity
                 return;
             }
+            */
 
-            if (config.weight < currentMin[0].weight) {
-                currentMin.clear();
-                currentMin.push_back(config);
-            }
-
-            else if (config.weight == currentMin[0].weight) {
-                currentMin.push_back(config);
+            if(config.weight <= currentMinWeight) {
+                #pragma omp critical
+                {
+                    if (config.weight < currentMinWeight) {
+                        currentMinWeight = config.weight;
+                        currentMin.clear();
+                        currentMin.push_back(config);
+                    } else if (config.weight == currentMinWeight) {
+                        currentMin.push_back(config);
+                    }
+                }
             }
         }
+
         return;
     }
 
 
-    if(config.weight > currentMin[0].weight){
+    if(config.weight > currentMinWeight){
         return;
     }
 
-    if( minA - a > currentProblem.nodeCount - depth || a > currentProblem.nodeCount/2){
-    //if( a > currentProblem.nodeCount/2){
+    //if( minA - a > currentProblem.nodeCount - depth || a > currentProblem.nodeCount/2){
+    if( minA - a > currentProblem.nodeCount - depth ){
         return;
     }
 
@@ -74,7 +86,14 @@ void BBSolver::rec(const Configuration& config, int depth) {
     Configuration n_config2(config);
     n_config2.assign(depth,2,currentProblem.bindingMatrix);
 
-    rec(n_config1, depth+1);
+    if(currentProblem.nodeCount - depth > 3) {
+        #pragma omp task default(none) firstprivate(depth, n_config1) shared(currentProblem, currentMinWeight, currentMin, minA, counter)
+        rec(n_config1, depth + 1);
+    }
+    else{
+        rec(n_config1, depth + 1);
+    }
+
     rec(n_config2, depth+1);
 }
 
