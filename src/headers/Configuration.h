@@ -15,7 +15,7 @@ using namespace std;
 
 class Configuration {
 public:
-    uint8_t* config = nullptr;
+    uint8_t* config = new uint8_t[1];
     int nodeCount = 0;
     int weight = 0;
 

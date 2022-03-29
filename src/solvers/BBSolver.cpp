@@ -5,6 +5,7 @@
 #include "headers/BBSolver.h"
 #include <iostream>
 #include <omp.h>
+#include <deque>
 
 const char *BBSolver::getName() {
     return "bb";
@@ -18,15 +19,33 @@ Solution BBSolver::solve(const Problem &problem) {
     Configuration initConfig(currentProblem.nodeCount);
     initConfig.assign(0,1,currentProblem.bindingMatrix);    //set node 0 to 1 to avoid duplicity in solutions
 
-    #pragma omp parallel default(none) shared(currentProblem, currentMinWeight, currentMin, minA, counter, initConfig)
-    {
-        #pragma omp single
-        {
-            //cout<<"num of threads: "<<omp_get_num_threads()<<endl;
+    deque<Configuration> q;
 
-            rec(initConfig, 1);
-        }
+    q.push_back(initConfig);
+
+    Configuration n_config1;
+    Configuration n_config2;
+
+    while(!q.empty() && q.size() < (unsigned int)omp_get_num_threads()*32){
+        n_config1 = q.front();
+        q.pop_front();
+
+        n_config2 = n_config1;
+
+        n_config1.assign(n_config1.set1Size + n_config1.set2Size,1 ,currentProblem.bindingMatrix);
+        n_config2.assign(n_config2.set1Size + n_config2.set2Size,2 ,currentProblem.bindingMatrix);
+
+        q.push_back(n_config1);
+        q.push_back(n_config2);
+
     }
+
+    #pragma omp parallel for default(none) shared(q, currentProblem, currentMinWeight, currentMin, minA, counter, initConfig)
+    for (unsigned int i = 0; i < q.size(); i++){
+        rec(q[i],q[i].set1Size + q[i].set2Size);
+    }
+
+    q.clear();
 
     Solution res(currentMin, currentProblem);
 
@@ -44,14 +63,7 @@ void BBSolver::rec(const Configuration& config, int depth) {
 
     if(depth >= currentProblem.nodeCount){
 
-        //if(a >= minA && a <= currentProblem.nodeCount/2) {
         if(a >= minA) {
-
-            /*
-            if(currentProblem.nodeCount%2==0 && a == currentProblem.nodeCount/2 && config.config[0] == 2){ //filtering duplicity
-                return;
-            }
-            */
 
             if(config.weight <= currentMinWeight) {
                 #pragma omp critical
@@ -75,7 +87,6 @@ void BBSolver::rec(const Configuration& config, int depth) {
         return;
     }
 
-    //if( minA - a > currentProblem.nodeCount - depth || a > currentProblem.nodeCount/2){
     if( minA - a > currentProblem.nodeCount - depth ){
         return;
     }
@@ -86,15 +97,9 @@ void BBSolver::rec(const Configuration& config, int depth) {
     Configuration n_config2(config);
     n_config2.assign(depth,2,currentProblem.bindingMatrix);
 
-    if(currentProblem.nodeCount - depth > 3) {
-        #pragma omp task default(none) firstprivate(depth, n_config1) shared(currentProblem, currentMinWeight, currentMin, minA, counter)
-        rec(n_config1, depth + 1);
-    }
-    else{
-        rec(n_config1, depth + 1);
-    }
 
-    rec(n_config2, depth+1);
+    rec(n_config1, depth + 1);
+    rec(n_config2, depth + 1);
 }
 
 BBSolver::~BBSolver(){}
