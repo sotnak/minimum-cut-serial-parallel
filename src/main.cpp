@@ -4,10 +4,13 @@
 #include <filesystem>
 #include <vector>
 #include <mutex>
+#include <mpi.h>
 
 #include "headers/Problem.h"
 #include "solvers/headers/ASolver.h"
 #include "headers/ArgGetter.h"
+#include "solvers/headers/MasterBBSolver.h"
+#include "solvers/headers/SlaveBBSolver.h"
 
 using namespace std;
 namespace fs = std::filesystem;
@@ -56,13 +59,12 @@ vector<string> splitString(const string& str, char delimiter = ' '){
     return res;
 }
 
-int main(int argc, char *argv[])
-{
+void master(int argc, char *argv[]){
     const char* path = ArgGetter::getSourcePath(argc, argv);
 
     ifstream input = getInput(path);
     ofstream output = getOutput(path);
-    ASolver* solver = ASolver::SolverFactory();
+    auto solver = new MasterBBSolver();
 
     chrono::steady_clock::time_point t1;
     chrono::steady_clock::time_point t2;
@@ -76,21 +78,62 @@ int main(int argc, char *argv[])
 
     t1 = getTimePoint();
 
+
     Solution solution = solver->solve(problem);
+
 
     t2=getTimePoint();
     time_span= getDuration(t1,t2);
     cout << "total time: " << time_span.count() << endl;
 
-    output << solution.toString()
-        << solver->getCounter() << " "
-        << time_span.count() << endl;
 
-    //input.close();
+    output << solution.toString()
+           << solver->getCounter() << " "
+           << time_span.count() << endl;
 
     output.close();
 
     delete solver;
+
+    //cout<<"master out"<<endl;
+}
+
+void slave(int argc, char *argv[]){
+
+
+    const char* path = ArgGetter::getSourcePath(argc, argv);
+
+    ifstream input = getInput(path);
+    auto solver = new SlaveBBSolver();
+
+    stringstream strstr;
+    strstr << input.rdbuf();
+    input.close();
+
+    Problem problem(Problem::ProblemFactory(strstr));
+
+    solver->solve(problem);
+
+    delete solver;
+    //cout<<"slave out"<<endl;
+}
+
+int main(int argc, char *argv[])
+{
+    int world_rank;
+
+    MPI_Init(&argc, &argv);
+
+    // Get the rank of the process
+    MPI_Comm_rank(MPI_COMM_WORLD, &world_rank);
+
+    if(world_rank == 0)
+        master(argc,argv);
+    else
+        slave(argc,argv);
+
+    // Finalize the MPI environment.
+    MPI_Finalize();
 
     return 0;
 }

@@ -4,15 +4,21 @@
 
 #include "headers/ASolver.h"
 
-#include "headers/BBSolver.h"
+#include "headers/MasterBBSolver.h"
 #include <stdexcept>
 
 
 ASolver::~ASolver() = default;
 
-ASolver *ASolver::SolverFactory(){
+ASolver *ASolver::SolverFactory(const string& name){
 
-    return new BBSolver();
+    if(name == "master")
+        return new MasterBBSolver();
+    if(name == "slave")
+        return new MasterBBSolver();
+    else{
+        throw invalid_argument("invalid solver name");
+    }
 }
 
 long long int ASolver::getCounter() const {

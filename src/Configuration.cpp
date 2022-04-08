@@ -116,3 +116,21 @@ int Configuration::a() const {
 
     return set1Size <= set2Size ? set1Size : set2Size;
 }
+
+void Configuration::recalculateSetSizes() {
+
+    set1Size=0;
+    set2Size=0;
+
+    int set=0;
+
+    for(int i=0; i<nodeCount; i++){
+        set = config[i];
+
+        if(set == 1)
+            set1Size++;
+
+        if(set == 2)
+            set2Size++;
+    }
+}

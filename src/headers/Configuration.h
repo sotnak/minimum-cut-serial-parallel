@@ -37,6 +37,8 @@ public:
     void assign(int node, int set, uint8_t** bindingMatrix);
 
     int a() const;
+
+    void recalculateSetSizes();
 };
 
 

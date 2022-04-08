@@ -6,21 +6,25 @@
 #define HW2_BBSOLVER_H
 
 #include "ASolver.h"
+#include <mpi.h>
+#include <deque>
 
 
-class BBSolver: public ASolver{
+class MasterBBSolver: public ASolver{
 
-    void rec(const Configuration& config, int depth=0);
     Problem currentProblem;
     vector<Configuration> currentMin;
     int currentMinWeight=INT32_MAX;
 
     int minA=5;
 
+    void fillQueue(std::deque<Configuration> &q) const;
+    void processResults(int resultSize, MPI_Status& status);
+
 public:
     static const char * getName();
     Solution solve(const Problem &problem) override;
-    ~BBSolver();
+    ~MasterBBSolver();
 };
 
 

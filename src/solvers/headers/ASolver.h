@@ -12,11 +12,12 @@
 class ASolver {
 protected:
     long long int counter=0;
+    enum Tag {job, result, sizeAndCount, resultValue};
 public:
     virtual Solution solve(const Problem& problem) = 0;
     static const char* getName();
     virtual ~ASolver();
-    static ASolver* SolverFactory();
+    static ASolver* SolverFactory(const string& name);
     [[nodiscard]] long long int getCounter() const;
     void resetCounter();
 };
