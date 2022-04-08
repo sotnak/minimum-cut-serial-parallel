@@ -25,19 +25,21 @@ Solution BBSolver::solve(const Problem &problem) {
 
     Configuration n_config1;
     Configuration n_config2;
+    int depth = 0;
 
-    while(!q.empty() && q.size() < (unsigned int)omp_get_num_threads()*32){
+    while(!q.empty() && q.size() < (unsigned int)omp_get_num_threads()*32 && depth < currentProblem.nodeCount - 4){
         n_config1 = q.front();
         q.pop_front();
 
         n_config2 = n_config1;
 
-        n_config1.assign(n_config1.set1Size + n_config1.set2Size,1 ,currentProblem.bindingMatrix);
-        n_config2.assign(n_config2.set1Size + n_config2.set2Size,2 ,currentProblem.bindingMatrix);
+        depth = n_config1.set1Size + n_config1.set2Size;
+
+        n_config1.assign(depth,1 ,currentProblem.bindingMatrix);
+        n_config2.assign(depth,2 ,currentProblem.bindingMatrix);
 
         q.push_back(n_config1);
         q.push_back(n_config2);
-
     }
 
     #pragma omp parallel for default(none) shared(q, currentProblem, currentMinWeight, currentMin, minA, counter, initConfig)
