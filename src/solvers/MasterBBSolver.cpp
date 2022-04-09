@@ -23,7 +23,7 @@ void MasterBBSolver::fillQueue(deque<Configuration>& q) const{
 
     MPI_Comm_size(MPI_COMM_WORLD, &world_size);
 
-    while(!q.empty() && q.size() < (unsigned int)world_size*32 && depth < currentProblem.nodeCount - 4){
+    while(!q.empty() && q.size() < (unsigned int)world_size*16 && depth < currentProblem.nodeCount - 10){
         n_config1 = q.front();
         q.pop_front();
 
@@ -39,59 +39,43 @@ void MasterBBSolver::fillQueue(deque<Configuration>& q) const{
     }
 }
 
+void MasterBBSolver::pushArrToCurrentMin(const int* arr, int size){
+
+    Configuration tmpconf(size-2);
+
+    for(int i=0; i<size; i++)
+        tmpconf.config[i]=arr[i];
+
+    tmpconf.numOfEdges = arr[size-2];
+    tmpconf.weight = arr[size-1];
+    tmpconf.recalculateSetSizes();
+
+    currentMin.push_back(tmpconf);
+}
+
 void MasterBBSolver::processResults(int numOfResults, MPI_Status& status){
 
     int resultValue = INT32_MAX;
-    int** results;
+    int* result = new int[currentProblem.nodeCount + 2];
     Configuration tmpconf;
 
     MPI_Recv(&resultValue, 1, MPI_INT, status.MPI_SOURCE, Tag::resultValue, MPI_COMM_WORLD, &status);
 
-    results = new int*[numOfResults];
-
-    for(int i=0; i<numOfResults; i++){
-        results[i] = new int[currentProblem.nodeCount + 2];
+    if(resultValue < currentMinWeight){
+        currentMinWeight = resultValue;
+        currentMin.clear();
     }
 
-    // 1 2 1 1 2 2 ... 2 numOfEdges weight
-    MPI_Recv(&results[0][0], numOfResults*(currentProblem.nodeCount+2), MPI_INT, status.MPI_SOURCE, Tag::result, MPI_COMM_WORLD, &status);
+    for(int i=0; i<numOfResults; i++) {
 
-    if(resultValue<=currentMinWeight){
+        // 1 2 1 1 2 2 ... 2 numOfEdges weight
+        MPI_Recv(&result[0], (currentProblem.nodeCount + 2), MPI_INT, status.MPI_SOURCE, Tag::result, MPI_COMM_WORLD, &status);
 
-        if(resultValue<currentMinWeight){
-            currentMinWeight = resultValue;
-            currentMin.clear();
-        }
-
-        for(int i = 0; i<numOfResults; i++){
-            cout<<"m: ";
-            for(int j = 0; j<currentProblem.nodeCount; j++){
-                cout << results[i][j] << " ";
-            }
-            cout << results[i][currentProblem.nodeCount] <<" ";
-            cout << results[i][currentProblem.nodeCount+1]<< endl;
-        } cout << endl;
-
-        for(int i=0; i<numOfResults; i++){
-            tmpconf = Configuration(currentProblem.nodeCount);
-            for(int j=0; j<currentProblem.nodeCount; j++)
-                tmpconf.config[j]=results[i][j];
-            tmpconf.numOfEdges = results[i][currentProblem.nodeCount];
-            tmpconf.weight = results[i][currentProblem.nodeCount+1];
-            tmpconf.recalculateSetSizes();
-
-            //cout<<"from slave: "<<tmpconf.toString()<<endl;
-
-            currentMin.push_back(tmpconf);
-        }
-
+        if (resultValue <= currentMinWeight)
+            pushArrToCurrentMin(result, currentProblem.nodeCount + 2);
     }
 
-    /*for(int i=0; i<numOfResults; i++){
-        delete[] results[i];
-    }*/
-
-    delete[] results;
+    delete[] result;
 }
 
 Solution MasterBBSolver::solve(const Problem &problem) {

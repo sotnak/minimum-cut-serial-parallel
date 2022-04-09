@@ -29,7 +29,21 @@ void SlaveBBSolver::recFromArr(int* task){
     }
 }
 
-void SlaveBBSolver::sendResults(){
+void SlaveBBSolver::sendResult(const Configuration& config) const{
+
+    int* result = new int[currentProblem.nodeCount+2];
+
+    for(int i = 0; i<currentProblem.nodeCount; i++)
+        result[i]=config.config[i];
+
+    result[currentProblem.nodeCount] = config.numOfEdges;
+    result[currentProblem.nodeCount+1] = config.weight;
+
+    // 1 2 1 1 2 2 ... 2 numOfEdges weight
+    MPI_Send(&result[0], currentProblem.nodeCount+2, MPI_INT, 0, Tag::result, MPI_COMM_WORLD);
+}
+
+void SlaveBBSolver::sendAllResults(){
 
     int* resultSize = new int[2];
     resultSize[0] = (int)currentMin.size();
@@ -41,39 +55,13 @@ void SlaveBBSolver::sendResults(){
 
         MPI_Send(&currentMinWeight, 1, MPI_INT, 0, Tag::resultValue, MPI_COMM_WORLD);
 
-        auto results = new int*[resultSize[0]];
-        for(int i=0; i<resultSize[0]; i++){
-            results[i] = new int[currentProblem.nodeCount+1];
+        for(const Configuration& config: currentMin){
+            sendResult(config);
         }
-
-        for(unsigned int i = 0; i<currentMin.size(); i++){
-            for(int j = 0; j<currentProblem.nodeCount; j++){
-                results[i][j]=currentMin[i].config[j];
-            }
-            results[i][currentProblem.nodeCount] = currentMin[i].numOfEdges;
-            results[i][currentProblem.nodeCount+1] = currentMin[i].weight;
-        }
-
-
-        for(unsigned int i = 0; i<currentMin.size(); i++){
-            cout<<"s: ";
-            for(int j = 0; j<currentProblem.nodeCount; j++){
-                cout << results[i][j] << " ";
-            }
-            cout << results[i][currentProblem.nodeCount] <<" ";
-            cout << results[i][currentProblem.nodeCount+1]<< endl;
-        } cout<<endl;
-
-        // 1 2 1 1 2 2 ... 2 numOfEdges weight
-        MPI_Send(&results[0][0], resultSize[0]*(currentProblem.nodeCount+2), MPI_INT, 0, Tag::result, MPI_COMM_WORLD);
-
-        /*
-        for(int i=0; i<resultSize[0]; i++){
-            delete[] results[i];
-        }*/
-
-        delete[] results;
     }
+
+    counter = 0;
+    currentMin.clear();
 
     delete[] resultSize;
 }
@@ -82,7 +70,7 @@ Solution SlaveBBSolver::solve(const Problem &problem) {
     minA = problem.nodeCount/2;
     currentProblem = problem;
 
-    sendResults();
+    sendAllResults();
 
     MPI_Status status;
     auto task = new int[currentProblem.nodeCount+2];
@@ -95,10 +83,7 @@ Solution SlaveBBSolver::solve(const Problem &problem) {
 
         recFromArr(task);
 
-        sendResults();
-
-        counter = 0;
-        currentMin.clear();
+        sendAllResults();
 
         // 1 2 1 1 2 2 ... 2 numOfEdges weight
         MPI_Recv(&task[0], currentProblem.nodeCount+2, MPI_INT, 0, Tag::job, MPI_COMM_WORLD, &status);

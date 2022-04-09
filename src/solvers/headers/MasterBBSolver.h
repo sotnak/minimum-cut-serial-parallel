@@ -20,6 +20,7 @@ class MasterBBSolver: public ASolver{
 
     void fillQueue(std::deque<Configuration> &q) const;
     void processResults(int resultSize, MPI_Status& status);
+    void pushArrToCurrentMin(const int *arr, int size);
 
 public:
     static const char * getName();

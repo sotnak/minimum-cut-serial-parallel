@@ -18,7 +18,8 @@ class SlaveBBSolver: public ASolver{
 
     int minA=5;
 
-    void sendResults();
+    void sendAllResults();
+    void sendResult(const Configuration& config) const;
     void recFromArr(int *task);
 
 public:
