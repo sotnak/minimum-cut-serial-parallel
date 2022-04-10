@@ -41,6 +41,7 @@ void SlaveBBSolver::sendResult(const Configuration& config) const{
 
     // 1 2 1 1 2 2 ... 2 numOfEdges weight
     MPI_Send(&result[0], currentProblem.nodeCount+2, MPI_INT, 0, Tag::result, MPI_COMM_WORLD);
+    delete[] result;
 }
 
 void SlaveBBSolver::sendAllResults(){
@@ -76,6 +77,7 @@ Solution SlaveBBSolver::solve(const Problem &problem) {
     auto task = new int[currentProblem.nodeCount+2];
     task[0]=0;
 
+    MPI_Recv(&currentMinWeight, 1, MPI_INT, 0, Tag::currentMinimum, MPI_COMM_WORLD, &status);
     // 1 2 1 1 2 2 ... 2 numOfEdges weight
     MPI_Recv(&task[0], currentProblem.nodeCount + 2, MPI_INT, 0, Tag::job, MPI_COMM_WORLD, &status);
 

@@ -1,8 +1,8 @@
 5560 56 x x x y x y x y y x y y x y y
+5560 56 x x y x x y x y x x y y x y y
 5560 56 x x y x x y y y x x y y x x y
 5560 56 x x y x x y y y x x y y x y y
-5560 56 x x y x x y x y x x y y x y y
-5560 56 x x y y x y y y x x y y x x y
 5560 56 x x y y x y x y x x y y x x y
 5560 56 x x y y x y x y x x y y x y y
-22863 0.465657
+5560 56 x x y y x y y y x x y y x x y
+22863 0.469307

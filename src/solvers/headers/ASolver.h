@@ -12,7 +12,7 @@
 class ASolver {
 protected:
     long long int counter=0;
-    enum Tag {job, result, sizeAndCount, resultValue};
+    enum Tag {job, result, sizeAndCount, resultValue, currentMinimum};
 public:
     virtual Solution solve(const Problem& problem) = 0;
     static const char* getName();

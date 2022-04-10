@@ -89,6 +89,10 @@ Solution MasterBBSolver::solve(const Problem &problem) {
     Configuration tmpconf;
     auto task = new int[currentProblem.nodeCount+2];
 
+    int bufferSize = ( (MPI_BSEND_OVERHEAD + (int)sizeof(int)) + (MPI_BSEND_OVERHEAD + (int)sizeof(int) * currentProblem.nodeCount+2 + 1) ) * 2;
+    uint8_t* buffer = new uint8_t[bufferSize];
+    MPI_Buffer_attach(buffer, bufferSize);
+
     while(!q.empty()){
         MPI_Recv(&resultSize[0], 2, MPI_INT, MPI_ANY_SOURCE, Tag::sizeAndCount, MPI_COMM_WORLD, &status);
         //cout<<"from slave: \n\tnumOfResults: "<< resultSize[0] << " \n\titerationsCount: "<< resultSize[1] << endl;
@@ -109,8 +113,9 @@ Solution MasterBBSolver::solve(const Problem &problem) {
         task[currentProblem.nodeCount] = tmpconf.numOfEdges;
         task[currentProblem.nodeCount+1] = tmpconf.weight;
 
+        MPI_Bsend(&currentMinWeight, 1, MPI_INT, status.MPI_SOURCE, Tag::currentMinimum, MPI_COMM_WORLD);
         // 1 2 1 1 2 2 ... 2 numOfEdges weight
-        MPI_Send(&task[0], currentProblem.nodeCount+2, MPI_INT, status.MPI_SOURCE, Tag::job, MPI_COMM_WORLD);
+        MPI_Bsend(&task[0], currentProblem.nodeCount+2, MPI_INT, status.MPI_SOURCE, Tag::job, MPI_COMM_WORLD);
     }
 
     int world_size;
@@ -130,10 +135,15 @@ Solution MasterBBSolver::solve(const Problem &problem) {
             task[j] = 10;
         }
 
-        MPI_Send(&task[0], currentProblem.nodeCount+1, MPI_INT, status.MPI_SOURCE, Tag::job, MPI_COMM_WORLD);
+        MPI_Bsend(&currentMinWeight, 1, MPI_INT, status.MPI_SOURCE, Tag::currentMinimum, MPI_COMM_WORLD);
+        // 1 2 1 1 2 2 ... 2 numOfEdges weight
+        MPI_Bsend(&task[0], currentProblem.nodeCount+1, MPI_INT, status.MPI_SOURCE, Tag::job, MPI_COMM_WORLD);
     }
     delete[] task;
     delete[] resultSize;
+
+    MPI_Buffer_detach(&buffer, &bufferSize);
+    delete[] buffer;
 
     Solution res(currentMin, currentProblem);
 
