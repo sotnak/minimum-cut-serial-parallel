@@ -87,6 +87,7 @@ Solution SlaveBBSolver::solve(const Problem &problem) {
 
         sendAllResults();
 
+        MPI_Recv(&currentMinWeight, 1, MPI_INT, 0, Tag::currentMinimum, MPI_COMM_WORLD, &status);
         // 1 2 1 1 2 2 ... 2 numOfEdges weight
         MPI_Recv(&task[0], currentProblem.nodeCount+2, MPI_INT, 0, Tag::job, MPI_COMM_WORLD, &status);
     }
