@@ -38,6 +38,7 @@ Configuration::Configuration(const Configuration &other){
 
     numOfEdges = other.numOfEdges;
 
+    delete[] config;
     config = new uint8_t[nodeCount];
 
     for(int i = 0; i < nodeCount; i++){
@@ -82,6 +83,8 @@ Configuration &Configuration::operator=(const Configuration &other) {
 
 Configuration::Configuration(int nodeCount) {
     this->nodeCount = nodeCount;
+    
+    delete[] config;
     config = new uint8_t[nodeCount];
 
     for(int i = 0; i < nodeCount; i++){
