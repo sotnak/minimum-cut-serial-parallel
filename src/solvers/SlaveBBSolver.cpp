@@ -46,11 +46,12 @@ void SlaveBBSolver::sendResult(const Configuration& config) const{
 
 void SlaveBBSolver::sendAllResults(){
 
-    int* resultSize = new int[2];
-    resultSize[0] = (int)currentMin.size();
-    resultSize[1] = (int)counter;
+    auto* resultSize = new unsigned long long[2];
+    resultSize[0] = currentMin.size();
+    resultSize[1] = counter;
 
-    MPI_Send(&resultSize[0], 2, MPI_INT, 0, Tag::sizeAndCount, MPI_COMM_WORLD);
+    //cout<<"slave: "<<counter<<endl;
+    MPI_Send(&resultSize[0], 2, MPI_UNSIGNED_LONG_LONG, 0, Tag::sizeAndCount, MPI_COMM_WORLD);
 
     if(resultSize[0]>0){
 

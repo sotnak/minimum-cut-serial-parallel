@@ -11,7 +11,7 @@
 
 class ASolver {
 protected:
-    long long int counter=0;
+    unsigned long long counter=0;
     enum Tag {job, result, sizeAndCount, resultValue, currentMinimum};
 public:
     virtual Solution solve(const Problem& problem) = 0;

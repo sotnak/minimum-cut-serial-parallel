@@ -1,5 +1,5 @@
-1300 25 x y x y y x y x x y
-1300 25 x y y x x y x y x y
 1300 25 x x y x y y x y x y
 1300 25 x x y x x y x y y y
-609 0.0466227
+1300 25 x y x y y x y x x y
+1300 25 x y y x x y x y x y
+597 0.0253044

@@ -53,7 +53,7 @@ void MasterBBSolver::pushArrToCurrentMin(const int* arr, int size){
     currentMin.push_back(tmpconf);
 }
 
-void MasterBBSolver::processResults(int numOfResults, MPI_Status& status){
+void MasterBBSolver::processResults(unsigned int numOfResults, MPI_Status& status){
 
     int resultValue = INT32_MAX;
     int* result = new int[currentProblem.nodeCount + 2];
@@ -66,7 +66,7 @@ void MasterBBSolver::processResults(int numOfResults, MPI_Status& status){
         currentMin.clear();
     }
 
-    for(int i=0; i<numOfResults; i++) {
+    for(unsigned int i=0; i<numOfResults; i++) {
 
         // 1 2 1 1 2 2 ... 2 numOfEdges weight
         MPI_Recv(&result[0], (currentProblem.nodeCount + 2), MPI_INT, status.MPI_SOURCE, Tag::result, MPI_COMM_WORLD, &status);
@@ -85,7 +85,7 @@ Solution MasterBBSolver::solve(const Problem &problem) {
     fillQueue(q);
 
     MPI_Status status;
-    int* resultSize = new int[2];   // numOfResults iterationsCount
+    auto* resultSize = new unsigned long long[2];   // numOfResults iterationsCount
     Configuration tmpconf;
     auto task = new int[currentProblem.nodeCount+2];
 
@@ -94,13 +94,13 @@ Solution MasterBBSolver::solve(const Problem &problem) {
     MPI_Buffer_attach(buffer, bufferSize);
 
     while(!q.empty()){
-        MPI_Recv(&resultSize[0], 2, MPI_INT, MPI_ANY_SOURCE, Tag::sizeAndCount, MPI_COMM_WORLD, &status);
+        MPI_Recv(&resultSize[0], 2, MPI_UNSIGNED_LONG_LONG, MPI_ANY_SOURCE, Tag::sizeAndCount, MPI_COMM_WORLD, &status);
         //cout<<"from slave: \n\tnumOfResults: "<< resultSize[0] << " \n\titerationsCount: "<< resultSize[1] << endl;
 
         counter += resultSize[1];
 
         if(resultSize[0]>0){
-            processResults(resultSize[0], status);
+            processResults((unsigned int)resultSize[0], status);
         }
 
         tmpconf = q.front();
@@ -123,7 +123,7 @@ Solution MasterBBSolver::solve(const Problem &problem) {
     MPI_Comm_size(MPI_COMM_WORLD, &world_size);
 
     for(int i=0; i<world_size-1; i++) {
-        MPI_Recv(&resultSize[0], 2, MPI_INT, MPI_ANY_SOURCE, Tag::sizeAndCount, MPI_COMM_WORLD, &status);
+        MPI_Recv(&resultSize[0], 2, MPI_UNSIGNED_LONG_LONG, MPI_ANY_SOURCE, Tag::sizeAndCount, MPI_COMM_WORLD, &status);
 
         counter += resultSize[1];
 
