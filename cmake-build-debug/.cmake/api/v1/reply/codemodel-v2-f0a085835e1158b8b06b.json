@@ -49,8 +49,8 @@
 	"kind" : "codemodel",
 	"paths" : 
 	{
-		"build" : "/home/pavel/Desktop/pdp/cmake-build-debug",
-		"source" : "/home/pavel/Desktop/pdp"
+		"build" : "/home/pavel/Desktop/pdp data/cmake-build-debug",
+		"source" : "/home/pavel/Desktop/pdp data"
 	},
 	"version" : 
 	{
