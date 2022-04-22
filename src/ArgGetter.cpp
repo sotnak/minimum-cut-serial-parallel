@@ -21,3 +21,23 @@ const char *ArgGetter::getSourcePath(int argc, char **argv) {
 
     throw invalid_argument("--source not found");
 }
+
+int ArgGetter::getThreadCount(int argc, char **argv) {
+    stringstream strstr;
+
+    for(int i=0; i<argc; i++) {
+        if (strcmp(argv[i], "--threads") == 0) {
+            if (i + 1 >= argc) {
+                throw invalid_argument("value of threads count not specified");
+            }
+
+            strstr << argv[i + 1];
+            int res;
+            strstr>>res;
+            return res;
+        }
+    }
+
+    return -1;
+}
+

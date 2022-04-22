@@ -19,6 +19,8 @@ public:
     static ASolver* SolverFactory();
     [[nodiscard]] long long int getCounter() const;
     void resetCounter();
+
+    virtual void setThreadCount(int count);
 };
 
 

@@ -150,4 +150,5 @@ CMakeFiles/pdp.dir/src/solvers/Asolver.cpp.o: \
  /home/pavel/Desktop/pdp\ task/src/solvers/headers/../../headers/Problem.h \
  /home/pavel/Desktop/pdp\ task/src/solvers/headers/../../headers/Configuration.h \
  /home/pavel/Desktop/pdp\ task/src/solvers/headers/BBSolver.h \
- /home/pavel/Desktop/pdp\ task/src/solvers/headers/ASolver.h
+ /home/pavel/Desktop/pdp\ task/src/solvers/headers/ASolver.h \
+ /usr/lib/gcc/x86_64-linux-gnu/9/include/omp.h

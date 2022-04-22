@@ -4,10 +4,13 @@
 
 #include "headers/BBSolver.h"
 #include <iostream>
-#include <omp.h>
 
 const char *BBSolver::getName() {
     return "bb";
+}
+
+void BBSolver::setThreadCount(int count) {
+    threadCount = count;
 }
 
 Solution BBSolver::solve(const Problem &problem) {
@@ -18,7 +21,7 @@ Solution BBSolver::solve(const Problem &problem) {
     Configuration initConfig(currentProblem.nodeCount);
     initConfig.assign(0,1,currentProblem.bindingMatrix);    //set node 0 to 1 to avoid duplicity in solutions
 
-    #pragma omp parallel default(none) shared(currentProblem, currentMinWeight, currentMin, minA, counter, initConfig)
+    #pragma omp parallel default(none) shared(currentProblem, currentMinWeight, currentMin, minA, counter, initConfig) num_threads(threadCount)
     {
         #pragma omp single
         {

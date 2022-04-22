@@ -26,3 +26,7 @@ void ASolver::resetCounter() {
 const char *ASolver::getName() {
     return nullptr;
 }
+
+void ASolver::setThreadCount(int count) {
+
+}
