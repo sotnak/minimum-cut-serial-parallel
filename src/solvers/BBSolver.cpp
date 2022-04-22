@@ -4,11 +4,14 @@
 
 #include "headers/BBSolver.h"
 #include <iostream>
-#include <omp.h>
 #include <deque>
 
 const char *BBSolver::getName() {
     return "bb";
+}
+
+void BBSolver::setThreadCount(int count) {
+    threadCount = count;
 }
 
 Solution BBSolver::solve(const Problem &problem) {
@@ -42,7 +45,7 @@ Solution BBSolver::solve(const Problem &problem) {
         q.push_back(n_config2);
     }
 
-    #pragma omp parallel for default(none) shared(q, currentProblem, currentMinWeight, currentMin, minA, counter, initConfig)
+    #pragma omp parallel for default(none) shared(q, currentProblem, currentMinWeight, currentMin, minA, counter, initConfig) num_threads(threadCount)
     for (unsigned int i = 0; i < q.size(); i++){
         rec(q[i],q[i].set1Size + q[i].set2Size);
     }

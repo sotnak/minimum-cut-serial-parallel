@@ -150,6 +150,6 @@ CMakeFiles/pdp.dir/src/solvers/BBSolver.cpp.o: \
  /home/pavel/Desktop/pdp\ data/src/solvers/headers/../../headers/Solution.h \
  /home/pavel/Desktop/pdp\ data/src/solvers/headers/../../headers/Problem.h \
  /home/pavel/Desktop/pdp\ data/src/solvers/headers/../../headers/Configuration.h \
- /usr/include/c++/9/iostream \
- /usr/lib/gcc/x86_64-linux-gnu/9/include/omp.h /usr/include/c++/9/deque \
+ /usr/lib/gcc/x86_64-linux-gnu/9/include/omp.h \
+ /usr/include/c++/9/iostream /usr/include/c++/9/deque \
  /usr/include/c++/9/bits/stl_deque.h /usr/include/c++/9/bits/deque.tcc

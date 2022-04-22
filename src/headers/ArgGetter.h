@@ -9,6 +9,8 @@
 class ArgGetter {
 public:
     static const char* getSourcePath(int argc, char *argv[]);
+
+    static int getThreadCount(int argc, char **argv);
 };
 
 

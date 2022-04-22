@@ -59,10 +59,14 @@ vector<string> splitString(const string& str, char delimiter = ' '){
 int main(int argc, char *argv[])
 {
     const char* path = ArgGetter::getSourcePath(argc, argv);
+    const int threads = ArgGetter::getThreadCount(argc, argv);
 
     ifstream input = getInput(path);
     ofstream output = getOutput(path);
     ASolver* solver = ASolver::SolverFactory();
+
+    if(threads>0)
+        solver->setThreadCount(threads);
 
     chrono::steady_clock::time_point t1;
     chrono::steady_clock::time_point t2;

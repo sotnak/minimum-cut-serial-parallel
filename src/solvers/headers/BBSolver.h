@@ -6,6 +6,7 @@
 #define HW2_BBSOLVER_H
 
 #include "ASolver.h"
+#include <omp.h>
 
 
 class BBSolver: public ASolver{
@@ -14,6 +15,7 @@ class BBSolver: public ASolver{
     Problem currentProblem;
     vector<Configuration> currentMin;
     int currentMinWeight=INT32_MAX;
+    int threadCount = omp_get_max_threads();
 
     int minA=5;
 
@@ -21,6 +23,8 @@ public:
     static const char * getName();
     Solution solve(const Problem &problem) override;
     ~BBSolver();
+
+    void setThreadCount(int count);
 };
 
 
