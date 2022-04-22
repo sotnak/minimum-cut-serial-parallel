@@ -34,6 +34,7 @@ Configuration::Configuration(const Configuration &other){
     nodeCount = other.nodeCount;
 
     set1Size = other.set1Size;
+    set2Size = other.set2Size;
 
     numOfEdges = other.numOfEdges;
 
@@ -56,6 +57,7 @@ Configuration &Configuration::operator=(const Configuration &other) {
     weight = other.weight;
 
     set1Size = other.set1Size;
+    set2Size = other.set2Size;
 
     numOfEdges = other.numOfEdges;
 
@@ -93,6 +95,9 @@ void Configuration::assign(int node, int set, uint8_t** bindingMatrix) {
     if(set == 1)
         set1Size++;
 
+    if(set == 2)
+        set2Size++;
+
     uint8_t tmpSet;
 
     for(int i = 0; i<nodeCount; i++){
@@ -109,5 +114,5 @@ void Configuration::assign(int node, int set, uint8_t** bindingMatrix) {
 
 int Configuration::a() const {
 
-    return set1Size;
+    return set1Size <= set2Size ? set1Size : set2Size;
 }

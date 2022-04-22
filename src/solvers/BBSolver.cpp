@@ -20,9 +20,9 @@ Solution BBSolver::solve(const Problem &problem) {
     currentMin.push_back(tmpConfig);
 
     Configuration initConfig(problem.nodeCount);
-    //initConfig.assign(0,1,currentProblem.bindingMatrix);    //set node 0 to 1 to avoid duplicity in solutions
+    initConfig.assign(0,1,currentProblem.bindingMatrix);    //set node 0 to 1 to avoid duplicity in solutions
 
-    rec(initConfig, 0);
+    rec(initConfig, 1);
 
     Solution res(currentMin, currentProblem);
 
@@ -38,13 +38,7 @@ void BBSolver::rec(const Configuration& config, int depth) {
 
     if(depth >= currentProblem.nodeCount){
 
-        if(a >= minA && a <= currentProblem.nodeCount/2) {
-        //if(a == currentProblem.nodeCount/2) {
-
-
-            if(currentProblem.nodeCount%2==0 && a == currentProblem.nodeCount/2 && config.config[0] == 2){ //filtering duplicity
-                return;
-            }
+        if(a >= minA) {
 
             if (config.weight < currentMin[0].weight) {
                 currentMin.clear();
@@ -63,8 +57,7 @@ void BBSolver::rec(const Configuration& config, int depth) {
         return;
     }
 
-    if( minA - a > currentProblem.nodeCount - depth || a > currentProblem.nodeCount/2){
-    //if( a > currentProblem.nodeCount/2){
+    if( minA - a > currentProblem.nodeCount - depth ){
         return;
     }
 

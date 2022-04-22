@@ -20,6 +20,7 @@ public:
     int weight = 0;
 
     int set1Size = 0;
+    int set2Size = 0;
 
     int numOfEdges = 0;
 
