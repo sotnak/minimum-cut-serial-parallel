@@ -1,8 +1,8 @@
+5560 56 x x x y x y x y y x y y x y y
 5560 56 x x y x x y x y x x y y x y y
 5560 56 x x y y x y x y x x y y x x y
 5560 56 x x y y x y x y x x y y x y y
 5560 56 x x y x x y y y x x y y x x y
 5560 56 x x y x x y y y x x y y x y y
 5560 56 x x y y x y y y x x y y x x y
-5560 56 x x x y x y x y y x y y x y y
-22848 0.00334111
+22848 0.002948

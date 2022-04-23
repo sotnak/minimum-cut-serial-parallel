@@ -1,2 +1,0 @@
-5060 100 x y y y x y y y y y y x x x x x x y x x
-339644 0.0251161

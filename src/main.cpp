@@ -33,14 +33,13 @@ ifstream getInput(const char* path){
 
 ofstream getOutput(const char* path){
     const string sPath = string(path);
-    const string outPath = "OUT/" + sPath.substr(sPath.find('/')+1).substr(sPath.find('/')+1);
-    const string folders = outPath.substr(0,outPath.find_last_of('/'));
+    const string folders = sPath.substr(0,sPath.find_last_of('/'));
 
     if(!fs::is_directory(folders))
         fs::create_directories(folders);
 
     ofstream output;
-    output.open(outPath);
+    output.open(sPath);
     if(output.fail())
         throw exception();
     return output;
@@ -59,10 +58,11 @@ vector<string> splitString(const string& str, char delimiter = ' '){
 int main(int argc, char *argv[])
 {
     const char* path = ArgGetter::getSourcePath(argc, argv);
+    const char* outPath = ArgGetter::getOutputPath(argc, argv);
     const int threads = ArgGetter::getThreadCount(argc, argv);
 
     ifstream input = getInput(path);
-    ofstream output = getOutput(path);
+    ofstream output = getOutput(outPath);
     ASolver* solver = ASolver::SolverFactory();
 
     if(threads>0)
