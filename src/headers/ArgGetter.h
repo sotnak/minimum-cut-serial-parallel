@@ -9,6 +9,7 @@
 class ArgGetter {
 public:
     static const char* getSourcePath(int argc, char *argv[]);
+    static const char* getOutputPath(int argc, char *argv[]);
 };
 
 
