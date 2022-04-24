@@ -1,4 +1,4 @@
-#!/bin/sh
+!/bin/sh
 
 #  ===========================================================================
 # |                                                                           |
@@ -13,18 +13,26 @@
 #  ===========================================================================
 
 # Request Bourne shell as shell for job
-#$ -S /bin/sh
+$ -S /bin/sh
 
 # Execute the job from the current working directory.
-#$ -cwd
+$ -cwd
 
 # Defines  or  redefines  the  path used for the standard error stream of the job.
-#$ -e .
+$ -e ./err.log
 
 # The path used for the standard output stream of the job.
-#$ -o .
+$ -o ./out.log
 
 # Do not change.
-#$ -pe ompi 1
+$ -pe ompi 1
 
-./my_sequential_application arg1 arg2 ...
+echo 'graf_20_17:'
+mpirun --bind-to none -np 4 ./app --source ./IN/graf_20_17.txt --out ./OUT/graf_20_17.txt
+
+echo 'graf_30_10:'
+mpirun --bind-to none -np 4 ./app --source ./IN/graf_30_10.txt --out ./OUT/graf_30_10.txt
+
+echo 'graf_30_20:'
+mpirun --bind-to none -np 4 ./app --source ./IN/graf_30_20.txt --out ./OUT/graf_30_20.txt
+
