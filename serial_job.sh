@@ -1,4 +1,4 @@
-!/bin/sh
+#!/bin/sh
 
 #  ===========================================================================
 # |                                                                           |
@@ -13,19 +13,19 @@
 #  ===========================================================================
 
 # Request Bourne shell as shell for job
-$ -S /bin/sh
+#$ -S /bin/sh
 
 # Execute the job from the current working directory.
-$ -cwd
+#$ -cwd
 
 # Defines  or  redefines  the  path used for the standard error stream of the job.
-$ -e ./err.log
+#$ -e ./err.log
 
 # The path used for the standard output stream of the job.
-$ -o ./out.log
+#$ -o ./out.log
 
 # Do not change.
-$ -pe ompi 1
+#$ -pe ompi 1
 
 echo 'graf_20_17:'
 ./app --source ./IN/graf_20_17.txt --out ./OUT/graf_20_17.txt
