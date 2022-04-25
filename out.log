@@ -1,0 +1,30 @@
+graf_20_17_t2:
+total time: 0.174883
+graf_30_10_t2:
+total time: 31.9766
+graf_30_20_t2:
+total time: 64.8415
+graf_20_17_t4:
+total time: 0.0839869
+graf_30_10_t4:
+total time: 15.5157
+graf_30_20_t4:
+total time: 31.8598
+graf_20_17_t8:
+total time: 0.05158
+graf_30_10_t8:
+total time: 8.64505
+graf_30_20_t8:
+total time: 18.4684
+graf_20_17_t16:
+total time: 0.0584547
+graf_30_10_t16:
+total time: 7.21615
+graf_30_20_t16:
+total time: 15.3216
+graf_20_17_t20:
+total time: 0.0585612
+graf_30_10_t20:
+total time: 7.68079
+graf_30_20_t20:
+total time: 14.8251
