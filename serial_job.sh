@@ -27,11 +27,20 @@
 # Do not change.
 #$ -pe ompi 1
 
-echo 'graf_20_17:'
-./app --source ./IN/graf_20_17.txt --out ./OUT/graf_20_17.txt
+# echo 'graf_20_17:'
+# ./app --source ./IN/graf_20_17.txt --out ./OUT/graf_20_17.txt
 
-echo 'graf_30_10:'
-./app --source ./IN/graf_30_10.txt --out ./OUT/graf_30_10.txt
+# echo 'graf_30_10:'
+# ./app --source ./IN/graf_30_10.txt --out ./OUT/graf_30_10.txt
 
-echo 'graf_30_20:'
-./app --source ./IN/graf_30_20.txt --out ./OUT/graf_30_20.txt
+# echo 'graf_30_20:'
+# ./app --source ./IN/graf_30_20.txt --out ./OUT/graf_30_20.txt
+
+echo 'graf_40_8:'
+./app --source ./IN/graf_40_8.txt --out ./OUT/graf_40_8.txt
+
+echo 'graf_40_15:'
+./app --source ./IN/graf_40_15.txt --out ./OUT/graf_40_15.txt
+
+echo 'graf_40_25:'
+./app --source ./IN/graf_40_25.txt --out ./OUT/graf_40_25.txt
